@@ -6,19 +6,43 @@ clientController.get("/new",(req,res)=>{
     res.end("client is here done")
 })
 
+//To  Create a Client 
 clientController.post("/create",async (req,res)=>{
     const {clientName,role}=req.body
     const datetime=new Date()
-    console.log("date and time is",datetime.toISOString());
+    try {
+        
     await client.create({
         clientName,
         "createdAt":datetime.toISOString(),
-        "updatedAt":"how",
-        "deletedAt":"hello",
+        "updatedAt":datetime.toISOString(),
+        "deletedAt":datetime.toISOString(),
         role
     })
-    res.end("data save successfully")
+    res.status(201).end("Client created successfully")
+    } catch (error) {
+        res.status(500).end(error)
+    }
 })
 
+// To Get the client list
+clientController.get("/clientsdata",async(req,res)=>{
+  try {
+    const data=await client.find({})
+    res.status(200).end(JSON.stringify(data))
+  } catch (error) {
+    res.status(500).end(error)
+  } 
+})
+
+
+clientController.patch("/updateClient",async(req,res)=>{
+    const {newClientName,_id}=req.body
+    await client.findOne({_id})
+    await client.updateOne({_id},{
+        clientName:newClientName
+    })
+    return res.send("Article updated success")
+})
 
 module.exports=clientController
