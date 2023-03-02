@@ -3,6 +3,7 @@ const mongoose=require("mongoose")
 const clientController = require("./routes/clientContoller.route");
 const projectController = require("./routes/projectController.route");
 const dashboardController = require("./routes/dashboardController.route");
+const workspaceController = require("./routes/workspaceController.route");
 
 
 const app=express()
@@ -21,8 +22,10 @@ app.get("/",(req,res)=>{
     res.end("home route")
 })
 app.use("/client", clientController);
-app.use("/projects",projectController)
-app.use("/dashboard",dashboardController)
+app.use("/projects",projectController);
+app.use("/dashboard",dashboardController);
+app.use("/user",userController);
+app.use("/workspace",workspaceController);
 
 
 
