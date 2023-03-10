@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
+    "start": "json-server --watch db.json --port 4001",
     "dev": "nodemon index.js"
   },
   "repository": {
@@ -21,11 +21,12 @@
   "homepage": "https://github.com/PrathmeshNerle/tt-backend-node#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "dotenv": "^16.0.3",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "json-server": "^0.17.2",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.9.0",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.21"
   }
 }

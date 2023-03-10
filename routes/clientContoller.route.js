@@ -8,7 +8,7 @@ clientController.get("/new",(req,res)=>{
 
 //To  Create a Client 
 clientController.post("/create",async (req,res)=>{
-    const {clientName,role}=req.body
+    const {clientName}=req.body
     const datetime=new Date()
     try {
         
@@ -17,7 +17,7 @@ clientController.post("/create",async (req,res)=>{
         "createdAt":datetime.toISOString(),
         "updatedAt":datetime.toISOString(),
         "deletedAt":datetime.toISOString(),
-        role
+        // role
     })
     res.status(201).end("Client created successfully")
     } catch (error) {
@@ -38,9 +38,11 @@ clientController.get("/clientsdata",async(req,res)=>{
 
 clientController.patch("/updateClient",async(req,res)=>{
     const {newClientName,_id}=req.body
+    const datetime=new Date()
     await client.findOne({_id})
     await client.updateOne({_id},{
-        clientName:newClientName
+        clientName:newClientName,
+        "updatedAt":datetime.toISOString(),
     })
     return res.send("Article updated success")
 })

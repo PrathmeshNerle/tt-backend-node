@@ -5,6 +5,9 @@ const clientController = require("./routes/clientContoller.route");
 const projectController = require("./routes/projectController.route");
 const dashboardController = require("./routes/dashboardController.route");
 const workspaceController = require("./routes/workspaceController.route");
+const userController = require("./routes/userContoller.route");
+const timerRouter = require("./routes/timerController.route");
+const timeEditorController = require("./routes/timeEditorController.route");
 
 
 const app=express()
@@ -13,6 +16,8 @@ const connectionparams={
     useNewUrlParser:true,
     useUnifiedTopology:true
 }
+
+mongoose.set('strictQuery', true);
 
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
@@ -32,7 +37,9 @@ app.use("/projects",projectController);
 app.use("/dashboard",dashboardController);
 app.use("/user",userController);
 app.use("/workspace",workspaceController);
+app.use("/timer", timerRouter )
+app.use("/settings", timeEditorController)
 
-app.listen(8080,()=>{
-    console.log("server started on 8080");
+app.listen(8000,()=>{
+    console.log("server started on 8000");
 })

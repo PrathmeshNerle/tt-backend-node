@@ -5,7 +5,7 @@ const Clientschema=new mongoose.Schema({
     createdAt:String,
     updatedAt:String,
     deletedAt:String,
-    role:String
+    // role:String
 })
 
 module.exports=mongoose.model("client",Clientschema)

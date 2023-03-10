@@ -3,10 +3,12 @@ const User=require("../models/userModel.js")
 const userController = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const checkToken = require("../middleware/auth.js");
+const authandadmin = require("../middleware/auth&admin.js");
 
 userController.post("/signup",async (req,res)=>{
     try{
-        const {email,password} = req.body;
+        const {email,password, role} = req.body;
         if(!(email && password)){
             return res.status(400).send("Email and password is mandatory.");
         }
@@ -17,18 +19,25 @@ userController.post("/signup",async (req,res)=>{
         }
         const encryptedPassword = await bcrypt.hash(password,13);
 
+        const dateofjoining = new Date();
+
         const user = await User.create({
             email:email.toLowerCase(),
-            password:encryptedPassword
+            password:encryptedPassword,
+            date_of_joining : dateofjoining.toISOString(),
+            role : role
         });
-        const token = jwt.sign(
-            {user_id:user._id,email},
-            "TOKEN KEY",
-            {
-                expiresIn: "1h"
-            }
-        );
-        user.token = token;
+        // const token = jwt.sign(
+        //     {user_id:user._id,email},
+        //     "TOKEN KEY",
+        //     {
+        //         expiresIn: "1h"
+        //     }
+        // );
+        // const finalUser =  await User.findOneAndUpdate({email}, {
+        //     token: token
+        // })
+        // user.token = token;
 
         return res.status(201).json(user);
     }
@@ -40,11 +49,14 @@ userController.post("/signup",async (req,res)=>{
 userController.post("/login",async (req,res)=>{
     try{
         const {email,password} = req.body;
+        // console.log(email, password)
         if(!(email && password)){
             res.status(400).send("Email and password is mandatory.");
         }
         const user = await User.findOne({ email });
+        // console.log(user, "user")
         const isCorrectPassword = await bcrypt.compare(password, user.password);
+        // console.log(isCorrectPassword)
         if(user && isCorrectPassword){
             const token = jwt.sign(
                 {user_id:user._id,email},
@@ -88,5 +100,34 @@ userController.post("/changepassword",async(req,res)=>{
         console.log(err);
     }
 });
+
+userController.get("/users", checkToken ,authandadmin, async (req, res)=>{
+    const data = await User.find({})
+
+    return res.status(201).send(data)
+})
+
+userController.post("/logout" , async (req, res)=>{
+    
+    // console.log(req.body)
+
+    const {_id} = req.body;
+
+    // LOGOUT CODE 
+
+    // const oneUser= await User.findByIdAndUpdate({_id})
+    // console.log(oneUser)
+    // if(req.headers){
+    // // console.log(req.headers);
+    // res.send("ok")
+    // }
+})
+
+
+userController.get("/profile", async (req, res)=>{
+    // const user = await User.find({})
+    res.send("profile information")
+})
+
 
 module.exports=userController;
